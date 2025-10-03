@@ -69,7 +69,7 @@ onMounted(async () => {
                     password: {
                       type: 'string',
                       format: 'password',
-                      example: ''
+                      example: 'SY1804$@'
                     }
                   }
                 }

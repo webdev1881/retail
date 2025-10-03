@@ -22,17 +22,17 @@ module.exports = {
   },
   productionSourceMap: false, // отключить source map в продакшн
     devServer: {
-        proxy: {
-            '/api': {
-                target: 'https://loyal.rulka.com.ua',
-                changeOrigin: true,
-                secure: false
-            },
-            '/skuSet': {
-                target: 'https://loyal.rulka.com.ua',
-                changeOrigin: true,
-                secure: false
-            }
-        }
-    }
+    //     proxy: {
+    //         '/api': {
+    //             target: 'https://loyal.rulka.com.ua',
+    //             changeOrigin: true,
+    //             secure: false
+    //         },
+    //         '/skuSet': {
+    //             target: 'https://loyal.rulka.com.ua',
+    //             changeOrigin: true,
+    //             secure: false
+    //         }
+    //     }
+    // }
 }
