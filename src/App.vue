@@ -24,12 +24,11 @@ onMounted(async () => {
       description: 'API для управління наборами номенклатури з можливістю масового додавання',
       version: '1.0.0',
       contact: {
-        email: 'support@rulka.com.ua'
       }
     },
     servers: [
       {
-        url: '',  // Пустая строка = текущий домен (localhost с прокси)
+        url: 'https://loyal.rulka.com.ua/',  // Пустая строка = текущий домен (localhost с прокси)
         description: 'Development with proxy'
       }
     ],
@@ -69,7 +68,7 @@ onMounted(async () => {
                     password: {
                       type: 'string',
                       format: 'password',
-                      example: 'SY1804$@'
+                      example: ''
                     }
                   }
                 }
