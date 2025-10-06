@@ -28,7 +28,7 @@ onMounted(async () => {
     },
     servers: [
       {
-        url: 'https://loyal.rulka.com.ua/',  // Пустая строка = текущий домен (localhost с прокси)
+        url: '',  // Пустая строка = текущий домен (localhost с прокси)
         description: 'Development with proxy'
       }
     ],
@@ -407,19 +407,14 @@ onMounted(async () => {
                   example1: {
                     summary: 'Приклад оновлення набору',
                     value: {
-                      id: 765,
+                      id: 766,
                       name: '-25% кулинария',
-                      extCode: '999',
-                      posName: '-25% кулинария',
-                      skuType: null,
                       skus: [
                         {
-                          uniqId: '048f3196-c115-4b79-8e51-4334fe6290dc;0',
-                          isGroup: 0,
                           id: '048f3196-c115-4b79-8e51-4334fe6290dc',
-                          parentId: '',
-                          name: 'Салат Секо гострий зі скумбрією 130гр',
-                          code: '42748'
+                        },
+                        {
+                          id: '6f55b8e1-991f-4646-b972-417c70a22e6d'
                         }
                       ],
                       skuSets: [
@@ -893,7 +888,7 @@ onMounted(async () => {
         },
         SkuSetUpdateRequest: {
           type: 'object',
-          required: ['id', 'name'],
+          required: ['id', 'name', 'skus::id'],
           properties: {
             id: {
               type: 'integer',
@@ -917,7 +912,13 @@ onMounted(async () => {
             skus: {
               type: 'array',
               items: {
-                type: 'object'
+                type: 'object',
+                items: {
+                  id: {
+                    type: 'string',
+                    description: 'Офіс-код'
+                  }
+                }
               }
             },
             skuSets: {
