@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://loyal.rulka.com.ua/:splat"
+  status = 200
+  force = true # Optional: forces the redirect even if a file exists at the path
