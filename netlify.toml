@@ -1,5 +1,16 @@
+[build]
+    # ignore all PRs opened by `dependabot` (with last commit made by `dependabot`)
+    ignore = 'git log -1 --pretty=%B | grep dependabot'
+
+# The following redirect is intended for use with most SPAs that handle
+# routing internally.
 [[redirects]]
-  from = "/api/*"
-  to = "https://loyal.rulka.com.ua/:splat"
-  status = 200
-  force = true # Optional: forces the redirect even if a file exists at the path
+    from = "/*"
+    to = "/index.html"
+    status = 200
+
+[[headers]]
+    # Define which paths this specific [[headers]] block will cover.
+    for = "/*"
+        [headers.values]
+        Access-Control-Allow-Origin = "*"
