@@ -28,7 +28,7 @@ onMounted(async () => {
     },
     servers: [
       {
-        url: '',  // Пустая строка = текущий домен (localhost с прокси)
+        url: 'https://loyal.rulka.com.ua',  // Пустая строка = текущий домен (localhost с прокси)
         description: 'Development with proxy'
       }
     ],
