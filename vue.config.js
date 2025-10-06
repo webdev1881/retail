@@ -20,17 +20,19 @@ module.exports = {
   css: {
     extract: false // стили внутрь JS
   },
-  productionSourceMap: false, // отключить source map в продакшн
+  productionSourceMap: true, // отключить source map в продакшн
     devServer: {
         proxy: {
             '/api': {
-                target: 'https://loyal.rulka.com.ua',
+                target: '/',
                 changeOrigin: true,
+                ws: true,
                 secure: false
             },
             '/skuSet': {
-                target: 'https://loyal.rulka.com.ua',
+                target: '/',
                 changeOrigin: true,
+                ws: true,
                 secure: false
             }
         }
