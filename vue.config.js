@@ -24,13 +24,13 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'https://loyal.rulka.com.ua',
+                target: 'https://89.105.216.114/',
                 changeOrigin: true,
                 ws: true,
                 secure: false
             },
             '/skuSet': {
-                target: 'https://loyal.rulka.com.ua',
+                target: 'https://89.105.216.114/',
                 changeOrigin: true,
                 ws: true,
                 secure: false

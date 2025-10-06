@@ -42,8 +42,12 @@ onMounted(async () => {
         description: 'Управління наборами номенклатури'
       },
       {
-        name: 'ADD many from JSON',
+        name: 'Add many from JSON',
         description: 'Масові операції'
+      },
+      {
+        name: 'Discount Rules',
+        description: 'Управління правилами знижок'
       }
     ],
     paths: {
@@ -207,7 +211,7 @@ onMounted(async () => {
                           {
                             id: 4,
                             name: 'Кулинария',
-                            extCode: '123',
+                            extCode: '0.0001',
                             posName: 'nabor128',
                             removed: false,
                             onlyProduct: false,
@@ -683,6 +687,134 @@ onMounted(async () => {
           }
         }
       },
+      '/discountRule/add': {
+        post: {
+          tags: ['Discount Rules'],
+          summary: 'Додати правило знижки',
+          description: 'Створення нового правила знижки з умовами та результатами застосування',
+          operationId: 'addDiscountRule',
+          security: [
+            {
+              cookieAuth: []
+            }
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/DiscountRuleAddRequest'
+                },
+                examples: {
+                  example1: {
+                    summary: 'Приклад правила знижки',
+                    value: {
+                      id: null,
+                      name: 'TEST',
+                      beginDate: '2025-10-05T21:00:00.000Z',
+                      endDate: '2025-10-07T08:01:00.000Z',
+                      status: 1,
+                      operatorId: 16,
+                      priority: 50,
+                      schedulingMode: 0,
+                      isForDcGen: false,
+                      comment: '',
+                      extCode: '777',
+                      onlyMessageMode: 0,
+                      description: null,
+                      isolationLevel: 1,
+                      applyMode: 2,
+                      posMessage: '',
+                      operatorMessage: '',
+                      ruleConditions: [],
+                      orderConditions: [
+                        {
+                          comparsionType: 0,
+                          type: 5,
+                          group: '0',
+                          skuSetId: 615,
+                          skuSetIdDesc: '"Любимая" уценка 15%',
+                          excludeSkuSetId: null,
+                          excludeSkuSetIdDesc: '',
+                          value: '{}'
+                        }
+                      ],
+                      resultScaleItems: [
+                        {
+                          comparsionType: 0,
+                          type: 9,
+                          results: [
+                            {
+                              actionSettings: null,
+                              isDiscountCouponReusable: false,
+                              discountCouponOperatorMessage: null,
+                              discountCouponPOSMessage: null,
+                              discountCouponCodeMessage: true,
+                              discountCouponPeriodBegin: null,
+                              discountCouponPeriodEnd: null,
+                              discountCouponPeriodDays: null,
+                              discountCouponPeriodHours: null,
+                              discountCouponPeriodMinutes: null,
+                              discountCouponPeriodType: 0,
+                              discountCouponUseLimit: null,
+                              expression: '',
+                              fixedValue: '0.0001',
+                              maxGroupsCount: null,
+                              discountTimeType: 0,
+                              discountValueType: 0,
+                              restriction: {
+                                conditions: [],
+                                exceptSkuSetId: null,
+                                exceptSkuSetIdDesc: '',
+                                skuSetId: null,
+                                skuSetIdDesc: '',
+                                groupApplyMode: 0,
+                                sortItemsMode: 1
+                              },
+                              valueType: 0
+                            }
+                          ],
+                          value: '{"value":}'
+                        }
+                      ],
+                      restrictions: [],
+                      rulesToBlock: []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            '200': {
+              description: 'Правило знижки успішно створено',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      data: {
+                        type: 'integer',
+                        description: 'ID створеного правила знижки',
+                        example: 700
+                      },
+                      error: {
+                        type: 'null'
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            '400': {
+              description: 'Некоректні дані'
+            },
+            '401': {
+              description: 'Не авторизований'
+            }
+          }
+        }
+      }
     },
     components: {
       securitySchemes: {
@@ -707,7 +839,7 @@ onMounted(async () => {
             },
             extCode: {
               type: 'string',
-              example: '123'
+              example: '0.0001'
             },
             posName: {
               type: 'string',
@@ -938,6 +1070,320 @@ onMounted(async () => {
               items: {
                 type: 'object'
               }
+            }
+          }
+        },
+        DiscountRuleAddRequest: {
+          type: 'object',
+          required: ['id', 'name', 'beginDate', 'endDate', 'status', 'operatorId', 'priority'],
+          properties: {
+            id: {
+              type: 'null',
+              description: 'Завжди null при створенні (ID генерується сервером)'
+            },
+            name: {
+              type: 'string',
+              description: 'Назва правила знижки',
+              example: 'TEST'
+            },
+            beginDate: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Дата та час початку дії правила',
+              example: '2025-10-05T21:00:00.000Z'
+            },
+            endDate: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Дата та час закінчення дії правила',
+              example: '2025-10-07T08:01:00.000Z'
+            },
+            status: {
+              type: 'integer',
+              description: 'Статус правила (0 - неактивне, 1 - активне)',
+              enum: [0, 1],
+              example: 1
+            },
+            operatorId: {
+              type: 'integer',
+              description: 'ID оператора, який створив правило',
+              example: 16
+            },
+            priority: {
+              type: 'integer',
+              description: 'Пріоритет застосування правила (0-100)',
+              minimum: 0,
+              maximum: 100,
+              example: 50
+            },
+            schedulingMode: {
+              type: 'integer',
+              description: 'Режим планування застосування правила',
+              example: 0
+            },
+            isForDcGen: {
+              type: 'boolean',
+              description: 'Чи призначено для генерації дисконтних купонів',
+              example: false
+            },
+            comment: {
+              type: 'string',
+              description: 'Коментар до правила',
+              example: ''
+            },
+            extCode: {
+              type: 'string',
+              nullable: true,
+              description: 'Зовнішній код для інтеграції',
+              example: null
+            },
+            onlyMessageMode: {
+              type: 'integer',
+              description: 'Режим лише повідомлення (без застосування знижки)',
+              example: 0
+            },
+            description: {
+              type: 'string',
+              nullable: true,
+              description: 'Детальний опис правила',
+              example: null
+            },
+            isolationLevel: {
+              type: 'integer',
+              description: 'Рівень ізоляції правила (1 - стандартний)',
+              example: 1
+            },
+            applyMode: {
+              type: 'integer',
+              description: 'Режим застосування знижки (0 - автоматично, 1 - вручну, 2 - змішаний)',
+              enum: [0, 1, 2],
+              example: 2
+            },
+            posMessage: {
+              type: 'string',
+              description: 'Повідомлення для відображення на POS-терміналі',
+              example: ''
+            },
+            operatorMessage: {
+              type: 'string',
+              description: 'Повідомлення для оператора',
+              example: ''
+            },
+            ruleConditions: {
+              type: 'array',
+              description: 'Додаткові умови застосування правила',
+              items: {
+                type: 'object'
+              },
+              example: []
+            },
+            orderConditions: {
+              type: 'array',
+              description: 'Умови замовлення для застосування знижки',
+              items: {
+                type: 'object',
+                properties: {
+                  comparsionType: {
+                    type: 'integer',
+                    description: 'Тип порівняння'
+                  },
+                  type: {
+                    type: 'integer',
+                    description: 'Тип умови'
+                  },
+                  group: {
+                    type: 'string',
+                    description: 'Група умов'
+                  },
+                  skuSetId: {
+                    type: 'integer',
+                    description: 'ID набору номенклатури для застосування'
+                  },
+                  skuSetIdDesc: {
+                    type: 'string',
+                    description: 'Опис набору номенклатури'
+                  },
+                  excludeSkuSetId: {
+                    type: 'integer',
+                    nullable: true,
+                    description: 'ID набору для виключення'
+                  },
+                  excludeSkuSetIdDesc: {
+                    type: 'string',
+                    description: 'Опис набору для виключення'
+                  },
+                  value: {
+                    type: 'string',
+                    description: 'Значення умови у форматі JSON'
+                  }
+                }
+              }
+            },
+            resultScaleItems: {
+              type: 'array',
+              description: 'Шкала результатів застосування знижки',
+              items: {
+                type: 'object',
+                properties: {
+                  comparsionType: {
+                    type: 'integer',
+                    description: 'Тип порівняння для результату'
+                  },
+                  type: {
+                    type: 'integer',
+                    description: 'Тип результату'
+                  },
+                  results: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        actionSettings: {
+                          type: 'object',
+                          nullable: true,
+                          description: 'Налаштування дії'
+                        },
+                        isDiscountCouponReusable: {
+                          type: 'boolean',
+                          description: 'Чи можна повторно використовувати купон'
+                        },
+                        discountCouponOperatorMessage: {
+                          type: 'string',
+                          nullable: true,
+                          description: 'Повідомлення оператору про купон'
+                        },
+                        discountCouponPOSMessage: {
+                          type: 'string',
+                          nullable: true,
+                          description: 'Повідомлення на POS про купон'
+                        },
+                        discountCouponCodeMessage: {
+                          type: 'boolean',
+                          description: 'Показувати код купона в повідомленні'
+                        },
+                        discountCouponPeriodBegin: {
+                          type: 'string',
+                          nullable: true,
+                          format: 'date-time',
+                          description: 'Початок періоду дії купона'
+                        },
+                        discountCouponPeriodEnd: {
+                          type: 'string',
+                          nullable: true,
+                          format: 'date-time',
+                          description: 'Закінчення періоду дії купона'
+                        },
+                        discountCouponPeriodDays: {
+                          type: 'integer',
+                          nullable: true,
+                          description: 'Тривалість купона в днях'
+                        },
+                        discountCouponPeriodHours: {
+                          type: 'integer',
+                          nullable: true,
+                          description: 'Тривалість купона в годинах'
+                        },
+                        discountCouponPeriodMinutes: {
+                          type: 'integer',
+                          nullable: true,
+                          description: 'Тривалість купона в хвилинах'
+                        },
+                        discountCouponPeriodType: {
+                          type: 'integer',
+                          description: 'Тип періоду дії купона'
+                        },
+                        discountCouponUseLimit: {
+                          type: 'integer',
+                          nullable: true,
+                          description: 'Ліміт використання купона'
+                        },
+                        expression: {
+                          type: 'string',
+                          description: 'Вираз для обчислення знижки'
+                        },
+                        fixedValue: {
+                          type: 'string',
+                          description: 'Фіксоване значення знижки',
+                          example: '0.0001'
+                        },
+                        maxGroupsCount: {
+                          type: 'integer',
+                          nullable: true,
+                          description: 'Максимальна кількість груп для застосування'
+                        },
+                        discountTimeType: {
+                          type: 'integer',
+                          description: 'Тип часу знижки (0 - без обмежень)'
+                        },
+                        discountValueType: {
+                          type: 'integer',
+                          description: 'Тип значення знижки (0 - фіксована сума, 1 - відсоток)'
+                        },
+                        restriction: {
+                          type: 'object',
+                          description: 'Обмеження застосування знижки',
+                          properties: {
+                            conditions: {
+                              type: 'array',
+                              description: 'Додаткові умови обмеження'
+                            },
+                            exceptSkuSetId: {
+                              type: 'integer',
+                              nullable: true,
+                              description: 'ID набору для виключення'
+                            },
+                            exceptSkuSetIdDesc: {
+                              type: 'string',
+                              description: 'Опис набору для виключення'
+                            },
+                            skuSetId: {
+                              type: 'integer',
+                              nullable: true,
+                              description: 'ID набору для застосування'
+                            },
+                            skuSetIdDesc: {
+                              type: 'string',
+                              description: 'Опис набору для застосування'
+                            },
+                            groupApplyMode: {
+                              type: 'integer',
+                              description: 'Режим застосування до групи'
+                            },
+                            sortItemsMode: {
+                              type: 'integer',
+                              description: 'Режим сортування товарів'
+                            }
+                          }
+                        },
+                        valueType: {
+                          type: 'integer',
+                          description: 'Тип значення результату'
+                        }
+                      }
+                    }
+                  },
+                  value: {
+                    type: 'string',
+                    description: 'Значення шкали у форматі JSON'
+                  }
+                }
+              }
+            },
+            restrictions: {
+              type: 'array',
+              description: 'Загальні обмеження правила',
+              items: {
+                type: 'object'
+              },
+              example: []
+            },
+            rulesToBlock: {
+              type: 'array',
+              description: 'Список ID правил, які блокуються цим правилом',
+              items: {
+                type: 'integer'
+              },
+              example: []
             }
           }
         }
