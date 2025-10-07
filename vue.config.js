@@ -18,9 +18,9 @@ module.exports = {
     ]
   },
   css: {
-    extract: false // стили внутрь JS
+    extract: false 
   },
-  productionSourceMap: true, // отключить source map в продакшн
+  productionSourceMap: true,
     devServer: {
         proxy: {
             '/api': {

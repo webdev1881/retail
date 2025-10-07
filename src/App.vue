@@ -41,10 +41,10 @@ onMounted(async () => {
         name: 'SkuSet',
         description: 'Управління наборами номенклатури'
       },
-      {
-        name: 'Add many from JSON',
-        description: 'Масові операції'
-      },
+      // {
+      //   name: 'Add many from JSON',
+      //   description: 'Масові операції'
+      // },
       {
         name: 'Discount Rules',
         description: 'Управління правилами знижок'
